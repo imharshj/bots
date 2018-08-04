@@ -5,9 +5,11 @@ import os
 import time
 import datetime
 import re
+import requests
 from slackclient import SlackClient
 
-slack_client = SlackClient('xoxb-412032214614-411752120631-nKsoW92bIREyhjsObnzNPMcG')
+
+slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
 starterbot_id = None
 
 # RTM read delay
@@ -51,11 +53,15 @@ def handle_command(command, channel):
     response = None
 
     # This is where you implement commands!
-
     if command.startswith(example_command):
         response = "Sure...Write some more code then I can do that!"
-
     if command == "time": response = datetime.datetime.now()
+    if command == "who are you?": response = "I'm Harsh's first bot!"
+    if command == "weather":
+        weather_api_key = os.environ.get("WEATHER_API_KEY")
+        url = "http://api.openweathermap.org/data/2.5/weather?q=pittsburgh&units=imperial&APPID=" + weather_api_key
+        reply = requests.post(url)
+        response = reply.json()["main"]["temp"]
 
     # Sends response back to channel
     slack_client.api_call(
@@ -76,3 +82,5 @@ if __name__ == "__main__":
                     time.sleep(RTM_read_delay)
     else:
         print("Connection Failed. Exception traceback printed above.")
+
+# END
