@@ -6,3 +6,6 @@ Implemented:
 - Default
 - Time
 - Weather (using an openweathermap.org API)
+
+[Reference](https://www.fullstackpython.com/blog/build-first-slack-bot-python.html)
+
